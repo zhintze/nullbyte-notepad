@@ -1,61 +1,68 @@
 # Nullbyte Notepad
 
-**Nullbyte Notepad** is an offline-first, Markdown-based note-taking application built with Flask and SQLite. It supports optional manual sync across devices, including Android. Designed to be lightweight, portable, and extensible, it is ideal for storing personal notes, recipes, workout logs, and research content.
-
----
-
-# Getting Started
-
-### Backend (Flask)
-cd backend
-python -m venv venv
-pip install -r requirements.txt
-python run.py
-visit http://localhost:5000
-
-### Android
-cd android
-open in Android Studio
-Run app in emulator/device
+**Nullbyte Notepad** is an offline-first, Markdown-based note-taking application built with Flask and SQLite, with optional Android support via Chaquopy. It is lightweight, extensible, and ideal for capturing personal notes, recipes, research, and more — all with optional manual sync across devices.
 
 ---
 
 ## Features
 
-- Markdown note editor with live preview
-- Tagging system for organizing and filtering notes
-- Full-text client-side search
-- Local SQLite storage for offline access
-- Manual sync across devices using a REST API or optional `.md` file export
-- Android APK support via embedded WebView and local Flask server
+- Live Markdown editor with preview  
+- Tagging and filtering system  
+- Full-text client-side search  
+- Offline-first with local SQLite storage  
+- Manual device-to-device sync (via REST)  
+- Android APK support using embedded WebView and Flask backend
+
+---
+
+## Getting Started
+
+### Backend (Flask)
+
+```bash
+cd flask_app
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+pip install -r requirements.txt
+python run.py
+# Open http://127.0.0.1:5000 in browser
+```
+
+### Android
+
+```bash
+cd android
+# Open project in Android Studio
+# Run on emulator or device
+```
 
 ---
 
 ## Tech Stack
 
-| Layer         | Technology                       |
-|---------------|----------------------------------|
-| Frontend      | Bootstrap 5, Vanilla JS, Showdown.js |
-| Markdown Editor | SimpleMDE                     |
-| Backend       | Flask, SQLite, SQLAlchemy        |
-| Android       | Android Studio + Chaquopy (Python) |
-| Sync Method   | Manual REST API endpoints        |
+| Layer        | Technology                          |
+|--------------|-------------------------------------|
+| Frontend     | Bootstrap 5, Vanilla JS, Showdown.js |
+| Markdown     | SimpleMDE                           |
+| Backend      | Flask, SQLite, SQLAlchemy           |
+| Android      | Android Studio + Chaquopy (Python)  |
+| Sync Method  | REST API endpoints                  |
 
 ---
 
 ## Data Model
 
-### Notes Table
+### Notes
 
-| Field         | Type       | Description                     |
-|---------------|------------|---------------------------------|
-| uuid          | UUID       | Unique global note ID           |
-| title         | String     | Note title                      |
-| markdown      | Text       | Raw Markdown content            |
-| last_modified | Timestamp  | Used for sync conflict resolution |
-| deleted       | Boolean    | Marks soft-deleted notes        |
+| Field         | Type      | Description                       |
+|---------------|-----------|-----------------------------------|
+| uuid          | UUID      | Unique global note ID             |
+| title         | String    | Note title                        |
+| markdown      | Text      | Raw markdown content              |
+| last_modified | Timestamp | For sync conflict resolution      |
+| deleted       | Boolean   | Marks soft-deleted notes          |
 
-### Tags Table
+### Tags
 
 | Field | Type   | Description     |
 |-------|--------|-----------------|
@@ -67,41 +74,25 @@ Run app in emulator/device
 
 ### POST /sync/push
 
-Pushes all locally modified notes (since last sync) to a remote Flask endpoint.
+Push locally modified notes to another device.
 
 ### GET /sync/pull
 
-Pulls updated notes from a remote source into the local device.
+Pull updated notes from another device.
 
-Notes are merged based on `last_modified` timestamps. Soft deletions are honored during sync.
+> Syncing is based on `last_modified` timestamps. Soft-deleted notes are honored and propagated.
 
 ---
 
 ## Roadmap (MVP)
 
-1. Local Flask app with markdown notes and tagging support
-2. Android APK with embedded WebView and Flask server
-3. Manual REST sync between devices
-4. Markdown export/import with frontmatter for versioned backups
+1. Markdown notes with tagging and local storage  
+2. Flask REST API for sync  
+3. Android APK with embedded Flask server  
+4. Markdown export/import with frontmatter support
 
 ---
 
-## Repository Structure
+## License
 
-nullbyte-notepad/
-├── app/
-│ ├── models.py
-│ ├── routes.py
-│ ├── templates/
-│ ├── static/
-│ └── init.py
-├── android_app/
-│ └── main_webview_wrapper/
-├── sync/
-│ ├── sync_push.py
-│ └── sync_pull.py
-├── export/
-│ └── md_exporter.py
-├── README.md
-├── requirements.txt
-└── run.py
+Licensed under the [MIT License](LICENSE).
